@@ -27,7 +27,7 @@ export const signup = async (req, res) => {
 
 		await user.save();
 		const { password: pass, ...rest } = user._doc;
-		const token = generateToken(res, user._id);
+		const token = await generateToken(res, user._id);
 		res.cookie("jwt_token", token, { secure: true, httpOnly: true });
 		res.status(201).send(rest);
 	} catch (error) {
@@ -51,9 +51,18 @@ export const signin = async (req, res) => {
 			throw new Error("Invalid credentials!");
 		}
 		const { password: pass, ...rest } = user._doc;
-		const token = generateToken(res, user._id);
+		const token = await generateToken(res, user._id);
 		res.cookie("jwt_token", token, { secure: true, httpOnly: true });
 		res.status(200).send(rest);
+	} catch (error) {
+		res.status(400).send("ERROR : " + error.message);
+	}
+};
+
+export const signout = async (req, res) => {
+	try {
+		res.cookie("jwt_token", null, { expiresIn: Date.now() });
+		res.status(200).send("Logout successfully!");
 	} catch (error) {
 		res.status(400).send("ERROR : " + error.message);
 	}
