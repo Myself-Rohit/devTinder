@@ -3,8 +3,7 @@ import User from "../models/user.js";
 
 const verifyToken = async (req, res, next) => {
 	try {
-		const token = req.cookies?.jwt_token;
-		console.log(">>>>>>", req.cookies);
+		const token = req.cookies.jwt_token;
 		if (!token) {
 			throw new Error("Invalid token");
 		}
