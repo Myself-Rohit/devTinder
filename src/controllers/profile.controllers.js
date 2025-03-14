@@ -13,7 +13,7 @@ export const getPofile = async (req, res) => {
 	}
 };
 
-export const updatePrfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
 	try {
 		const { firstName, lastName, age, gender, about } = req.body;
 		if (!firstName || !lastName || !age || !gender || !about) {
