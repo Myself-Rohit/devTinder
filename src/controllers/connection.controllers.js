@@ -64,3 +64,17 @@ export const reviewConnection = async (req, res) => {
 		res.status(400).send("ERROR : " + error.message);
 	}
 };
+
+export const getPendingConnections = async (req, res) => {
+	try {
+		const userId = req.user._id;
+
+		const connection = await Connection.find({
+			receiverId: userId,
+			status: "interested",
+		}).populate("senderId", "firstName lastName age gender about");
+		res.status(200).send(connection);
+	} catch (error) {
+		res.status(400).send("ERROR : " + error.message);
+	}
+};
