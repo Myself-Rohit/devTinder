@@ -38,3 +38,29 @@ export const createConnection = async (req, res) => {
 		res.status(400).send("ERROR : " + error.message);
 	}
 };
+
+export const reviewConnection = async (req, res) => {
+	try {
+		const { status, connectionId } = req.params;
+		const userId = req.user._id;
+
+		const allowedStatus = ["accepted", "rejected"];
+		if (!allowedStatus.includes(status)) {
+			throw new Error("Invalid status type");
+		}
+
+		const connection = await Connection.findOne({
+			_id: connectionId,
+			receiverId: userId,
+			status: "interested",
+		});
+		if (!connection) {
+			throw new Error("Connection not found!");
+		}
+		connection.status = status;
+		await connection.save();
+		res.status(200).send(connection);
+	} catch (error) {
+		res.status(400).send("ERROR : " + error.message);
+	}
+};

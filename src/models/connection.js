@@ -10,12 +10,10 @@ const connectionSchema = new mongoose.Schema({
 		required: true,
 	},
 	status: {
-		type: {
-			type: String,
-			enum: {
-				values: ["interested", "ignored", "accepted", "rejected"],
-				message: `{VALUES} is invalid status type`,
-			},
+		type: String,
+		enum: {
+			values: ["interested", "ignored", "accepted", "rejected"],
+			message: `{VALUES} is invalid status type`,
 		},
 	},
 });
