@@ -72,7 +72,7 @@ export const getPendingConnections = async (req, res) => {
 		const connection = await Connection.find({
 			receiverId: userId,
 			status: "interested",
-		}).populate("senderId", "firstName lastName age gender about");
+		}).populate("senderId", "firstName lastName age gender about photoUrl");
 		res.status(200).send(connection);
 	} catch (error) {
 		res.status(400).send("ERROR : " + error.message);
@@ -85,7 +85,10 @@ export const getAcceptedConnections = async (req, res) => {
 		const connection = await Connection.find({
 			status: "accepted",
 			$or: [{ senderId: userId }, { receiverId: userId }],
-		}).populate("senderId receiverId", "firstName lastName age gender about");
+		}).populate(
+			"senderId receiverId",
+			"firstName lastName age gender about photoUrl"
+		);
 		const users = connection.map((data) => {
 			if (data.senderId._id == String(userId)) {
 				return data.receiverId;

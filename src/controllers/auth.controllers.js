@@ -4,7 +4,16 @@ import { generateToken } from "../middlewares/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const { firstName, lastName, email, age, password, about } = req.body;
+		const {
+			firstName,
+			lastName,
+			email,
+			age,
+			password,
+			about,
+			photoUrl,
+			gender,
+		} = req.body;
 
 		if (!firstName || !lastName || !email || !age || !password || !about) {
 			throw new Error("All fields are required!");
@@ -24,6 +33,8 @@ export const signup = async (req, res) => {
 			email,
 			age,
 			password: passwordHash,
+			photoUrl,
+			gender,
 		});
 
 		await user.save();

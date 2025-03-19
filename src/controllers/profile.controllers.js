@@ -15,8 +15,9 @@ export const getPofile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
 	try {
-		const { firstName, lastName, age, gender, about } = req.body;
-		if (!firstName || !lastName || !age || !gender || !about) {
+		const { firstName, lastName, age, gender, about, photoUrl } = req.body;
+		console.log(">>", req.body);
+		if (!firstName || !lastName || !age || !gender || !about || !photoUrl) {
 			throw new Error("All fields are required!");
 		}
 		const user = await User.findByIdAndUpdate(
@@ -27,6 +28,7 @@ export const updateProfile = async (req, res) => {
 				age,
 				gender,
 				about,
+				photoUrl,
 			}
 		);
 		await user.save();
