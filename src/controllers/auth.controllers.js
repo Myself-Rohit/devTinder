@@ -4,18 +4,9 @@ import { generateToken } from "../middlewares/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const {
-			firstName,
-			lastName,
-			email,
-			age,
-			password,
-			about,
-			photoUrl,
-			gender,
-		} = req.body;
+		const { firstName, lastName, gender, email, password } = req.body;
 
-		if (!firstName || !lastName || !email || !age || !password || !about) {
+		if (!firstName || !lastName || !email || !password || !gender) {
 			throw new Error("All fields are required!");
 		}
 
@@ -26,15 +17,26 @@ export const signup = async (req, res) => {
 
 		const salt = await bcrypt.genSalt(10);
 		const passwordHash = await bcrypt.hash(password, salt);
+
+		const malePic = `https://avatar.iran.liara.run/public/boy?username=${
+			firstName + lastName
+		}`;
+		const femalePic = `https://avatar.iran.liara.run/public/girl?username=${
+			firstName + lastName
+		}`;
+		let profilePic =
+			"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+		if (gender !== "other") {
+			profilePic = gender == "male" ? malePic : femalePic;
+		}
+
 		const user = new User({
 			firstName,
 			lastName,
-			about,
 			email,
-			age,
 			password: passwordHash,
-			photoUrl,
 			gender,
+			photoUrl: profilePic,
 		});
 
 		await user.save();

@@ -16,7 +16,6 @@ export const getPofile = async (req, res) => {
 export const updateProfile = async (req, res) => {
 	try {
 		const { firstName, lastName, age, gender, about, photoUrl } = req.body;
-		console.log(">>", req.body);
 		if (!firstName || !lastName || !age || !gender || !about || !photoUrl) {
 			throw new Error("All fields are required!");
 		}

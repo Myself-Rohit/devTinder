@@ -22,7 +22,7 @@ export const getFeed = async (req, res) => {
 				{ _id: { $ne: userId } },
 			],
 		})
-			.select("firstName lastName age gender about")
+			.select("firstName lastName age gender about photoUrl")
 			.skip(skip)
 			.limit(limit);
 		res.status(200).send(users);
