@@ -7,6 +7,8 @@ import connectionRouter from "../src/routes/connection.routes.js";
 import userRouter from "../src/routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { createServer } from "http";
+import initializeSocket from "./socket.js";
 const app = express();
 dotenv.config();
 app.use(
@@ -20,9 +22,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 const port = process.env.PORT || 7001;
 
+const server = createServer(app);
+initializeSocket(server);
 connectDB().then(() => {
 	console.log("Database Connected!!");
-	app.listen(port, () => {
+	server.listen(port, () => {
 		console.log(`app running at ${port}`);
 	});
 });
