@@ -1,4 +1,13 @@
 import User from "../models/user.js";
+import cloudinary from "cloudinary";
+import fs from "fs"
+import dotenv from "dotenv";
+dotenv.config();
+cloudinary.config({
+	cloud_name: process.env.CLOUD_NAME,
+	api_key: process.env.API_KEY,
+	api_secret: process.env.API_SECRET,
+});
 
 export const getPofile = async (req, res) => {
 	try {
@@ -15,10 +24,15 @@ export const getPofile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
 	try {
-		const { firstName, lastName, age, gender, about, photoUrl } = req.body;
-		if (!firstName || !lastName || !age || !gender || !about || !photoUrl) {
+		const { firstName, lastName, age, gender, about } = req.body;
+		if (!firstName || !lastName || !age || !gender || !about) {
 			throw new Error("All fields are required!");
 		}
+		const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path);
+		fs.unlink((req.file.path),(err)=>{
+			if(err) console.log(err)
+				else console.log("file deleted!")
+		})
 		const user = await User.findByIdAndUpdate(
 			{ _id: req.user._id },
 			{
@@ -27,9 +41,12 @@ export const updateProfile = async (req, res) => {
 				age,
 				gender,
 				about,
-				photoUrl,
-			}
+			},
+			{ new: true }
 		);
+		if (cloudinaryResponse) {
+			user.photoUrl = cloudinaryResponse?.secure_url;
+		}
 		await user.save();
 		const { password: pass, ...rest } = user._doc;
 		res.status(200).send(rest);
