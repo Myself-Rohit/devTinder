@@ -10,7 +10,9 @@ export const getMessages = async (req, res) => {
 				{ senderId, receiverId },
 				{ senderId: receiverId, receiverId: senderId },
 			],
-		});
+		})
+			.populate("senderId", "firstName lastName age gender about photoUrl")
+			.populate("receiverId", "firstName lastName age gender about photoUrl");
 		res.status(200).send(messages);
 	} catch (error) {
 		res.status(400).send("ERROR : " + error.message);
