@@ -56,7 +56,6 @@ export const updateProfile = async (req, res) => {
 		const { password: pass, ...rest } = user._doc;
 		res.status(200).send(rest);
 	} catch (error) {
-		console.log(error);
 		res.status(400).send("ERROR : " + error.message);
 	}
 };

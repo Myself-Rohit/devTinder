@@ -30,3 +30,15 @@ export const getFeed = async (req, res) => {
 		res.status(400).send("ERROR : " + error.message);
 	}
 };
+
+export const getUser = async (req, res) => {
+	try {
+		const userId = req.params.userId;
+		const user = await User.findById(userId).select(
+			"firstName lastName age gender about photoUrl"
+		);
+		res.status(200).send(user);
+	} catch (error) {
+		res.status(400).send("ERROR : " + error.message);
+	}
+};
